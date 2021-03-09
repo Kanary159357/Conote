@@ -11,7 +11,9 @@ const ItemWrapper = styled.div`
 `
 
 interface ItemProps {
-    item : {description:String}
+    item : {description:String;
+            id:number;
+            }
 }
 
 const ContentItem = ({item}:ItemProps)=>{

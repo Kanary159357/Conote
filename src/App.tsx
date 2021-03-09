@@ -13,24 +13,25 @@ const Wrapper = styled.div`
   width: 100vw;
 `
 const temp:IContent[] = [
-  {description : "11111111111111124214124214121111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"},
-  {description : "안ㅂㅈㄼㅈㄼㅈㄼㅈㄹ녕"},
-  {description : "안ㅂㅈㄹㅈㅂㄹㅈㅂㄹ녕"},
-  {description : "안ㅈㅂㄹㅈㅂㄼㅈㄹ녕"},
-  {description : "안ㅂㅈㄼㅈㄼㅈㄼㅈㄹ녕"},
-  {description : "안ㅂㅈㄹㅈㅂㄹㅈㅂㄹ녕"},
-  {description : "안ㅈㅂㄹㅈㅂㄼㅈㄹ녕"},
-  {description : "안녕ㅂㅈㄹㅈㅂㄹ"},
-  {description : "안ㅈㅂㄹㅈㅂㄹㅈㅂㄹ녕"},
-  {description : "안ㄹㄼㅈㅂㅈㄹ녕"},
-  {description : "안녕ㅈㅂㄹㅈㅂㄹㅈㅂㄹ"},
-  {description : "안ㅂㅈㄼㅈ녕"},
-  {description : "안ㅂㅈㄹㅈㅂㄹ녕"},
-  {description : "안녕나는"},
+  {description : "11111111111111124214124214121111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111", id:1},
+  {description : "안ㅂㅈㄼㅈㄼㅈㄼㅈㄹ녕",id:2},
+  {description : "안ㅂㅈㄹㅈㅂㄹㅈㅂㄹ녕",id:3},
+  {description : "안ㅈㅂㄹㅈㅂㄼㅈㄹ녕",id:4},
+  {description : "안ㅂㅈㄼㅈㄼㅈㄼㅈㄹ녕",id:5},
+  {description : "안ㅂㅈㄹㅈㅂㄹㅈㅂㄹ녕",id:6},
+  {description : "안ㅈㅂㄹㅈㅂㄼㅈㄹ녕",id:7},
+  {description : "안녕ㅂㅈㄹㅈㅂㄹ",id:8},
+  {description : "안ㅈㅂㄹㅈㅂㄹㅈㅂㄹ녕",id:9},
+  {description : "안ㄹㄼㅈㅂㅈㄹ녕",id:10},
+  {description : "안녕ㅈㅂㄹㅈㅂㄹㅈㅂㄹ",id:11},
+  {description : "안ㅂㅈㄼㅈ녕",id:12},
+  {description : "안ㅂㅈㄹㅈㅂㄹ녕",id:13},
+  {description : "안녕나는",id:14},
 ]
 
 interface IContent{
   description:string;
+  id:number;
 };
 function App() {
   const [index, setIndex] = useState(0);
@@ -38,14 +39,20 @@ function App() {
   const handleMenuClick = ():void=>{
     console.log();
   }
-  
+  const onChange = (id:number, value: string)=>{
+    setArr(
+      arr.map(item=>
+        item.id==id? {...item, description:value} : item
+        )
+    )
+  }
   return (
     <Wrapper>
       <GlobalStyle/>
       <ContentMenu 
         ContentArr={arr}
         />
-      <ContentView item={arr[0]}/>
+      <ContentView item={arr[0]} onChange={onChange}/>
     </Wrapper>
   );
 }

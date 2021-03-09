@@ -12,13 +12,13 @@ const MenuWrapper = styled.div`
 `
 
 interface MenuProps {
-    ContentArr : {description:String}[]
+    ContentArr : {description:String; id:number}[]
 }
 const ContentMenu = ({ContentArr}:MenuProps)=>{
     return(
         <MenuWrapper>
-            {ContentArr.map((item,index)=>{
-                return(<ContentItem item={item} key={index}></ContentItem>)
+            {ContentArr.map((item)=>{
+                return(<ContentItem item={item} key={item.id}></ContentItem>)
             })}
            
         </MenuWrapper>

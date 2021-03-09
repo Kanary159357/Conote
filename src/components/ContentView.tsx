@@ -1,5 +1,11 @@
 import styled from 'styled-components';
-import MonacoEditor from 'monaco-editor';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/material.css'
+import 'codemirror/mode/xml/xml'
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/mode/css/css'
+import {Controlled as ControlledEditor} from 'react-codemirror2';
+
 const ViewWrapper = styled.div`
     width: 80%;
     height: 100%;
@@ -11,16 +17,9 @@ const ViewMenu = styled.div`
     width: 100%;
     background: black;
 `
-const ViewContent = styled.textarea`
+const ViewContent = styled.div`
     padding: 0;
     width: 100%;
-    height: calc(20% - 65px);
-    overflow-y:hidden;
-    border:none;
-    outline:none;
-    word-break:break-all;
-    white-space:normal;
-    font-size:20px;
     margin-left: 20px;
     &::-webkit-scrollbar {
         display: none;
@@ -31,18 +30,25 @@ const ViewContent = styled.textarea`
 
 
 interface ViewProp{
-    item: {description:String}
+    item: {description:string, id:number};
+    onChange : (id:number, value:string)=>void;
 }
 
-const ContentView = ({item}:ViewProp)=>{
+const ContentView = ({item, onChange}:ViewProp)=>{
     return(
         <ViewWrapper>
         <ViewMenu>
         <button>저장</button>
         </ViewMenu>
-        <MonacoEditor>
-            
-        </MonacoEditor>
+        <ViewContent>
+        <ControlledEditor
+            value={item.description}
+            onBeforeChange={(editor,data,value)=>{
+                onChange(item.id, value);
+            }}
+        >
+        </ControlledEditor>
+        </ViewContent>
         </ViewWrapper>
     )
 }
