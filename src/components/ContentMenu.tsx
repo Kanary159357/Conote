@@ -12,13 +12,14 @@ const MenuWrapper = styled.div`
 `
 
 interface MenuProps {
-    ContentArr : {description:String; id:number}[]
+    ContentArr : {description:String; id:number}[];
+    onClick : (id:number)=>void;
 }
-const ContentMenu = ({ContentArr}:MenuProps)=>{
+const ContentMenu = ({ContentArr, onClick}:MenuProps)=>{
     return(
         <MenuWrapper>
             {ContentArr.map((item)=>{
-                return(<ContentItem item={item} key={item.id}></ContentItem>)
+                return(<ContentItem item={item} key={item.id} onClick={onClick}></ContentItem>)
             })}
            
         </MenuWrapper>
