@@ -1,10 +1,15 @@
-import React,{useState} from 'react';
+import React,{useCallback, useState} from 'react';
 import ContentMenu from './components/ContentMenu';
 import ContentView from './components/ContentView';
+
 import styled,{createGlobalStyle} from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   box-sizing:border-box;
+  @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
+  body{
+    font-family: 'Noto Sans KR', sans-serif;
+  }
 `
 
 const Wrapper = styled.div`

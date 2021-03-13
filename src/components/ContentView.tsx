@@ -1,14 +1,15 @@
 import styled from 'styled-components';
 import {useEffect,useRef} from 'react'
 import'codemirror/mode/css/css';
-import 'codemirror/lib/codemirror.css';
+import './CodeMirror.css';
 import 'codemirror/theme/material.css';
-import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/javascript/javascript';
-
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/addon/scroll/simplescrollbars.js'
+import 'codemirror/addon/scroll/simplescrollbars.css'
 const CodeMirror = require('codemirror');
 const ViewWrapper = styled.div`
-    width: 80%;
+    width: 88%;
     height: 100%;
     display:flex;
     flex-direction:column;
@@ -24,13 +25,7 @@ const ViewContent = styled.div`
     &::-webkit-scrollbar {
         display: none;
     }
-    .react-codemirror2{
-        height:50%;
-        .CodeMirror{
-            height:100%;
-            font-size:20px;
-        }
-    }
+  
 `
 const ViewResult = styled.div`
 
@@ -49,16 +44,24 @@ const ContentView = ({item, onChange}:ViewProp)=>{
             onChange(item.id, editor.getValue());
         }
         codeMirror.current= CodeMirror.fromTextArea(editorRef.current!,{
-            lineNumbers: true,
-            mode:"markdown",
+            mode:'markdown',
+            lineWrapping:'true',
+            theme: 'material',
+            scrollbarStyle:'overlay'
         });
         codeMirror.current?.setValue(item.description);
         codeMirror.current?.on('change', handleChange);
+        codeMirror.current?.on('cursorActivity', (doc)=>console.log(doc.getSelection()));
+
         return()=>{
             if(codeMirror.current) codeMirror.current.toTextArea();
         }
+        
     },[item.id])
 
+    useEffect(()=>{
+
+    },[])
     return(
         <ViewWrapper>
         <ViewMenu>

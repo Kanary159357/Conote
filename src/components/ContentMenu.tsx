@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import ContentItem from './ContentItem';
 const MenuWrapper = styled.div`
-    width: calc(20% - 1px);
+    width: calc(12% - 1px);
     height:100%;
     background: #fff;
     overflow-y:scroll;
