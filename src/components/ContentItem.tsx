@@ -42,7 +42,7 @@ const ContentItem = ({item, onClick}:ItemProps)=>{
     const handleClick = ()=>{
         onClick(item.id);
     }
-    const line = item.description.indexOf('\n') ==-1 ? item.description.length : item.description.indexOf('\n');
+    const line = item.description.indexOf('\n') ===-1 ? item.description.length : item.description.indexOf('\n');
     const Ti = item.description.substring(0,line)
     const Ma = item.description.substring(line);
     return(

@@ -1,14 +1,7 @@
 import styled from 'styled-components';
-import {useEffect,useRef} from 'react'
-import'codemirror/mode/css/css';
-import './CodeMirror.css';
-import 'codemirror/theme/material.css';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/markdown/markdown';
-import 'codemirror/addon/scroll/simplescrollbars.js'
-import 'codemirror/addon/scroll/simplescrollbars.css'
-const CodeMirror = require('codemirror');
-const ViewWrapper = styled.div`
+import MarkEditor from './Mark/MarkEditor';
+import MarkView from './Mark/MarkView';
+const ContentWrapper = styled.div`
     width: 88%;
     height: 100%;
     display:flex;
@@ -18,17 +11,13 @@ const ViewMenu = styled.div`
     height: 50px;
     width: 100%;
     background: black;
-`
-const ViewContent = styled.div`
-    width: calc(100%);
-    height: calc(100% - 50px);
-    &::-webkit-scrollbar {
-        display: none;
-    }
-  
-`
-const ViewResult = styled.div`
+`;
 
+const ViewContent = styled.div`
+    display:flex;
+    flex-direction:row;
+    height: calc(100% - 50px);
+    width: 100%;
 `
 interface ViewProp{
     item: {description:string, id:number};
@@ -36,41 +25,17 @@ interface ViewProp{
 }
 
 const ContentView = ({item, onChange}:ViewProp)=>{
-    let codeMirror = useRef<CodeMirror.EditorFromTextArea>();
-    const editorRef= useRef<HTMLTextAreaElement>(null);
- 
-    useEffect(()=>{
-        const handleChange = (editor:CodeMirror.Editor)=>{
-            onChange(item.id, editor.getValue());
-        }
-        codeMirror.current= CodeMirror.fromTextArea(editorRef.current!,{
-            mode:'markdown',
-            lineWrapping:'true',
-            theme: 'material',
-            scrollbarStyle:'overlay'
-        });
-        codeMirror.current?.setValue(item.description);
-        codeMirror.current?.on('change', handleChange);
-        codeMirror.current?.on('cursorActivity', (doc)=>console.log(doc.getSelection()));
-
-        return()=>{
-            if(codeMirror.current) codeMirror.current.toTextArea();
-        }
-        
-    },[item.id])
-
-    useEffect(()=>{
-
-    },[])
+   
     return(
-        <ViewWrapper>
+        <ContentWrapper>
         <ViewMenu>
         <button>저장</button>
         </ViewMenu>
         <ViewContent>
-        <textarea ref= {editorRef}/>
+         <MarkEditor item={item} onChange={onChange}/>
+         <MarkView item = {item}/>
          </ViewContent>
-        </ViewWrapper>
+        </ContentWrapper>
     )
 }
 
