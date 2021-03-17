@@ -28,13 +28,13 @@ const ContentView = ({item, onChange}:ViewProp)=>{
    
     return(
         <ContentWrapper>
-        <ViewMenu>
-        <button>저장</button>
-        </ViewMenu>
-        <ViewContent>
-         <MarkEditor item={item} onChange={onChange}/>
-         <MarkView item = {item}/>
-         </ViewContent>
+            <ViewMenu>
+            <button>저장</button>
+            </ViewMenu>
+            <ViewContent>
+                <MarkEditor item={item} onChange={onChange}/>
+                <MarkView item = {item}/>
+            </ViewContent>
         </ContentWrapper>
     )
 }

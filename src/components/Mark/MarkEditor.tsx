@@ -37,7 +37,7 @@ const MarkEditor = ({item, onChange}:ViewProp)=>{
         });
         codeMirror.current?.setValue(item.description);
         codeMirror.current?.on('change', handleChange);
-        codeMirror.current?.on('cursorActivity', (doc)=>console.log(doc.getSelection()));
+        
 
         return()=>{
             if(codeMirror.current) codeMirror.current.toTextArea();
