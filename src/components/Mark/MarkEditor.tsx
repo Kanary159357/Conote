@@ -10,7 +10,7 @@ import 'codemirror/addon/scroll/simplescrollbars.css'
 const CodeMirror = require('codemirror');
 
 const Editor = styled.div`
-  width: calc(50%);
+  width: 50%;
     &::-webkit-scrollbar {
         display: none;
     }
@@ -37,7 +37,7 @@ const MarkEditor = ({item, onChange}:ViewProp)=>{
         });
         codeMirror.current?.setValue(item.description);
         codeMirror.current?.on('change', handleChange);
-        
+        codeMirror.current?.clearHistory();
 
         return()=>{
             if(codeMirror.current) codeMirror.current.toTextArea();
@@ -45,8 +45,17 @@ const MarkEditor = ({item, onChange}:ViewProp)=>{
         
     },[item.id])
 
+
+    const onUndoClick = ()=>{
+
+        console.log(codeMirror.current?.getHistory());
+    } 
+    const onRedoClick = ()=>{
+        codeMirror.current?.redo();
+    } 
     return (
         <Editor>
+
             <textarea ref= {editorRef}/>
         </Editor>
     )

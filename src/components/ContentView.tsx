@@ -16,7 +16,7 @@ const ViewMenu = styled.div`
 const ViewContent = styled.div`
     display:flex;
     flex-direction:row;
-    height: calc(100% - 50px);
+    height: 100%;
     width: 100%;
 `
 interface ViewProp{
@@ -28,9 +28,6 @@ const ContentView = ({item, onChange}:ViewProp)=>{
    
     return(
         <ContentWrapper>
-            <ViewMenu>
-            <button>저장</button>
-            </ViewMenu>
             <ViewContent>
                 <MarkEditor item={item} onChange={onChange}/>
                 <MarkView item = {item}/>

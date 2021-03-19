@@ -9,7 +9,9 @@ const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
   body{
     font-family: 'Noto Sans KR', sans-serif;
+    box-sizing: border-box;
   }
+
 `
 
 const Wrapper = styled.div`
@@ -41,7 +43,9 @@ interface IContent{
 };
 function App() {
   const [index, setIndex] = useState(0);
+  const [Noteid, setNoteId] = useState(15); 
   const [arr, setArr] = useState<IContent[]>(temp);
+
   const onChange = (id:number, value: string)=>{
     setArr(
       arr.map(item=>
@@ -49,6 +53,20 @@ function App() {
         )
     )
   }
+
+  const onNoteDel = () =>{
+
+  }
+
+  const onNoteAdd = ()=>{
+    const newNote = {
+      description: "",
+      id: Noteid,
+    }
+    setArr([...arr, newNote]);
+    setNoteId(Noteid=>Noteid+1);
+  };
+
   const onClick = (id:number)=>{
     setIndex(id);
   }
@@ -58,6 +76,7 @@ function App() {
       <ContentMenu 
         ContentArr={arr}
         onClick= {onClick}
+        onNoteAdd = {onNoteAdd}
         />
       <ContentView item={arr[index]} onChange={onChange}/>
     </Wrapper>

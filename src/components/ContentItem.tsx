@@ -1,9 +1,10 @@
-import React from 'react';
+import React from "react";
 import styled,{css} from 'styled-components';
 
 const ItemWrapper = styled.div`
-    height: calc(8% - 1px);
-    overflow:hidden;
+    flex: 1 1 auto;
+    min-height:79px;
+    overflow-y: auto;
     padding-left: 20px;
     white-space:nowrap;
     text-overflow: ellipsis;
@@ -46,7 +47,7 @@ const ContentItem = ({item, onClick}:ItemProps)=>{
     const Ti = item.description.substring(0,line)
     const Ma = item.description.substring(line);
     return(
-        <ItemWrapper onClick={handleClick}>
+        <ItemWrapper  onClick={handleClick}>
             <ItemTitle>{Ti}</ItemTitle>
             <ItemContent>{Ma}</ItemContent>
         </ItemWrapper>
