@@ -1,14 +1,14 @@
 import React from "react";
 import styled,{css} from 'styled-components';
-
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faTrash} from '@fortawesome/free-solid-svg-icons';
 const ItemWrapper = styled.div`
     flex: 1 1 auto;
     min-height:79px;
-    overflow-y: auto;
-    padding-left: 20px;
-    white-space:nowrap;
-    text-overflow: ellipsis;
     border-bottom : 1px solid #d9d9d9;
+    position:relative;
+    max-height:100px;
+    display:flex;
 `
 
 const ItemCss = css`
@@ -16,8 +16,15 @@ const ItemCss = css`
     white-space:nowrap;
     overflow:hidden;
 `
-
 const ItemContent = styled.div`
+    width:200px;
+    overflow-y: auto;
+    padding-left: 40px;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+`
+
+const ItemMain = styled.div`
     ${ItemCss};
     font-size:16px;
     padding-top:10px;
@@ -29,27 +36,47 @@ const ItemTitle = styled.div`
     padding-top : 8px;
     color:#1d1d1d;
 `
-
+const ItemDel = styled.div`
+    top:30%;
+    position:absolute;
+    right:20px;
+    opacity: 0;
+    cursor:pointer;
+    font-size:25px;
+    &:hover{
+        color:#ff9494;
+        opacity: 1;
+    }
+`
 
 interface ItemProps {
     item : {description:String;
             id:number;
     },
-    onClick : (id:number)=>void;
+    onIndex : (id:number)=>void;
+    onNoteDel : (id:number)=>void;
 }
 
 
-const ContentItem = ({item, onClick}:ItemProps)=>{
+const ContentItem = ({item, onIndex, onNoteDel}:ItemProps)=>{
     const handleClick = ()=>{
-        onClick(item.id);
+        onIndex(item.id);
+    }
+    const handleDel = ()=>{
+        onNoteDel(item.id)
     }
     const line = item.description.indexOf('\n') ===-1 ? item.description.length : item.description.indexOf('\n');
     const Ti = item.description.substring(0,line)
     const Ma = item.description.substring(line);
     return(
-        <ItemWrapper  onClick={handleClick}>
-            <ItemTitle>{Ti}</ItemTitle>
-            <ItemContent>{Ma}</ItemContent>
+        <ItemWrapper>
+            <ItemContent onClick={handleClick}>
+                <ItemTitle>{Ti}</ItemTitle>
+                <ItemMain>{Ma}</ItemMain>
+            </ItemContent>
+            <ItemDel onClick={handleDel}>
+                <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+            </ItemDel>
         </ItemWrapper>
     )
 }

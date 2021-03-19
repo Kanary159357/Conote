@@ -3,12 +3,11 @@ import ContentItem from './ContentItem';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 const MenuWrapper = styled.div`
-    width: calc(12% - 1px);
-    min-width:200px;
+    width: calc(15% - 1px);
+    min-width:300px;
     height: 100%;
     background: #fff;
     border-right: 1px solid #b8b8b8;
-
 `
 
 const MenuControl = styled.div`
@@ -39,10 +38,11 @@ const MenuContent = styled.div`
 
 interface MenuProps {
     ContentArr : {description:String; id:number}[];
-    onClick : (id:number)=>void;
+    onIndex : (id:number)=>void;
     onNoteAdd : ()=>void;
+    onNoteDel : (id:number)=>void;
 }
-const ContentMenu = ({ContentArr, onClick, onNoteAdd}:MenuProps)=>{
+const ContentMenu = ({ContentArr, onIndex, onNoteAdd, onNoteDel}:MenuProps)=>{
     return(
         <MenuWrapper>
             <MenuControl>
@@ -52,7 +52,7 @@ const ContentMenu = ({ContentArr, onClick, onNoteAdd}:MenuProps)=>{
             </MenuControl>
             <MenuContent>
             {[...ContentArr].reverse().map((item)=>{
-                return(<ContentItem item={item} key={item.id} onClick={onClick}/>)
+                return(<ContentItem item={item} key={item.id} onIndex={onIndex} onNoteDel={onNoteDel}/>)
             })}
             </MenuContent>
 

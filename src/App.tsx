@@ -1,4 +1,4 @@
-import React,{useCallback, useState} from 'react';
+import React,{useCallback, useState, useEffect} from 'react';
 import ContentMenu from './components/ContentMenu';
 import ContentView from './components/ContentView';
 
@@ -45,29 +45,36 @@ function App() {
   const [index, setIndex] = useState(0);
   const [Noteid, setNoteId] = useState(15); 
   const [arr, setArr] = useState<IContent[]>(temp);
-
   const onChange = (id:number, value: string)=>{
     setArr(
       arr.map(item=>
-        item.id===id? {...item, description:value} : item
+        item.id===id ? {...item, description:value} : item
         )
     )
   }
 
-  const onNoteDel = () =>{
-
+  const onNoteDel = (id:number) =>{
+    const newArr = arr.filter(item=>
+      item.id!==id);
+    setIndex(newArr.length-1);
+    setArr(newArr);
   }
+
+
+  useEffect(()=>{
+    console.log(index);
+  },[index,arr]);
 
   const onNoteAdd = ()=>{
     const newNote = {
-      description: "",
+      description: "New Note",
       id: Noteid,
     }
     setArr([...arr, newNote]);
     setNoteId(Noteid=>Noteid+1);
   };
 
-  const onClick = (id:number)=>{
+  const onIndex = (id:number)=>{
     setIndex(id);
   }
   return (
@@ -75,8 +82,9 @@ function App() {
       <GlobalStyle/>
       <ContentMenu 
         ContentArr={arr}
-        onClick= {onClick}
+        onIndex= {onIndex}
         onNoteAdd = {onNoteAdd}
+        onNoteDel = {onNoteDel}
         />
       <ContentView item={arr[index]} onChange={onChange}/>
     </Wrapper>

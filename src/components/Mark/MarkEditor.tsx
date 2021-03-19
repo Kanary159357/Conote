@@ -43,16 +43,9 @@ const MarkEditor = ({item, onChange}:ViewProp)=>{
             if(codeMirror.current) codeMirror.current.toTextArea();
         }
         
-    },[item.id])
+    },[item,onChange])
 
 
-    const onUndoClick = ()=>{
-
-        console.log(codeMirror.current?.getHistory());
-    } 
-    const onRedoClick = ()=>{
-        codeMirror.current?.redo();
-    } 
     return (
         <Editor>
 

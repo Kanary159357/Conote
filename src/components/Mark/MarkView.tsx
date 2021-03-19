@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import marked from 'marked';
 import prismjs from 'prismjs';
+import React, {useEffect} from 'react';
 import './Prismtheme.css'
 const RenderView = styled.div`
     width: 50%;
@@ -20,7 +21,7 @@ interface AProps{
 
 const MarkView = ({item}:AProps)=>{
     const marker = marked;
-   
+    let markup;
     marker.setOptions({
         highlight: function (code, lang) {
             if(prismjs.languages[lang]){
@@ -42,8 +43,10 @@ const MarkView = ({item}:AProps)=>{
         smartypants: false,
         xhtml: false,
     });
-    const html = marker(item.description);
-    const markup = {__html:html};
+
+    useEffect(()=>{
+        markup = {__html: marker(item.description)};
+    },[item])
 
     return(
         <RenderView dangerouslySetInnerHTML={markup}/>
