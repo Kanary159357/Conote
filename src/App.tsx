@@ -1,15 +1,18 @@
-import React,{useCallback, useState, useEffect} from 'react';
+import React,{useState} from 'react';
 import ContentMenu from './components/ContentMenu';
 import ContentView from './components/ContentView';
-
 import styled,{createGlobalStyle} from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
-  box-sizing:border-box;
+  *{
+    box-sizing:border-box;
+  }
   @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
   body{
     font-family: 'Noto Sans KR', sans-serif;
     box-sizing: border-box;
+    border:0;
+    margin:0;
   }
 
 `
@@ -20,35 +23,22 @@ const Wrapper = styled.div`
   width: 100vw;
 `
 const temp:IContent[] = [
-  {description:"",id:0},
-  {description : "11111111111111124214124214121111111111111111111111111111111111111111111111111111111111111111111\n\n111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111", id:1},
-  {description : "안ㅂㅈㄼㅈㄼㅈㄼㅈㄹ녕",id:2},
-  {description : "안ㅂㅈㄹㅈㅂㄹㅈㅂㄹ녕",id:3},
-  {description : "안ㅈㅂㄹㅈㅂㄼㅈㄹ녕",id:4},
-  {description : "안ㅂㅈㄼㅈㄼㅈㄼㅈㄹ녕",id:5},
-  {description : "안ㅂㅈㄹㅈㅂㄹㅈㅂㄹ녕",id:6},
-  {description : "안ㅈㅂㄹㅈㅂㄼㅈㄹ녕",id:7},
-  {description : "안녕ㅂㅈㄹㅈㅂㄹ",id:8},
-  {description : "안ㅈㅂㄹㅈㅂㄹㅈㅂㄹ녕",id:9},
-  {description : "안ㄹㄼㅈㅂㅈㄹ녕",id:10},
-  {description : "안녕ㅈㅂㄹㅈㅂㄹㅈㅂㄹ",id:11},
-  {description : "안ㅂㅈㄼㅈ녕",id:12},
-  {description : "안ㅂㅈㄹㅈㅂㄹ녕",id:13},
-  {description : "안녕나는",id:14},
+
 ]
 
 interface IContent{
   description:string;
   id:number;
+  curdate: Date;
 };
 function App() {
   const [index, setIndex] = useState(0);
-  const [Noteid, setNoteId] = useState(15); 
+  const [Noteid, setNoteId] = useState(0); 
   const [arr, setArr] = useState<IContent[]>(temp);
-  const onChange = (id:number, value: string)=>{
+  const onChange = (id:number, value: string, curdate:Date)=>{
     setArr(
       arr.map(item=>
-        item.id===id ? {...item, description:value} : item
+        item.id===id ? {...item, description:value, date:curdate} : item
         )
     )
   }
@@ -58,20 +48,18 @@ function App() {
       item.id!==id);
     setIndex(newArr.length-1);
     setArr(newArr);
+    setNoteId(Noteid=>Noteid-1);
   }
-
-
-  useEffect(()=>{
-    console.log(index);
-  },[index,arr]);
 
   const onNoteAdd = ()=>{
     const newNote = {
-      description: "New Note",
+      description: "",
       id: Noteid,
+      curdate:new Date(),
     }
     setArr([...arr, newNote]);
     setNoteId(Noteid=>Noteid+1);
+    setIndex(newNote.id);
   };
 
   const onIndex = (id:number)=>{
@@ -86,7 +74,7 @@ function App() {
         onNoteAdd = {onNoteAdd}
         onNoteDel = {onNoteDel}
         />
-      <ContentView item={arr[index]} onChange={onChange}/>
+      <ContentView len = {arr.length} item={arr[index]} onChange={onChange}/>
     </Wrapper>
   );
 }

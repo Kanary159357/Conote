@@ -4,7 +4,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 const MenuWrapper = styled.div`
     width: calc(15% - 1px);
-    min-width:300px;
     height: 100%;
     background: #fff;
     border-right: 1px solid #b8b8b8;

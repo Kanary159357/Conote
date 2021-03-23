@@ -1,11 +1,18 @@
 import styled from 'styled-components';
 import marked from 'marked';
 import prismjs from 'prismjs';
-import React, {useEffect} from 'react';
+import React,{useState} from 'react';
 import './Prismtheme.css'
+const Wrapper = styled.div<RenderProps>`
+    width: ${props=>props.toggle? "0%" : "50%"};
+    transition: all 0.2s;
+`;
+
+interface RenderProps{
+    toggle: boolean;
+}
+
 const RenderView = styled.div`
-    width: 50%;
-    height:100%;
     text-overflow:ellipsis;
     word-wrap: break-word;
     box-sizing: border-box;
@@ -13,13 +20,16 @@ const RenderView = styled.div`
 	border-radius: 10px;
 	background-color: #F5F5F5;
     }
+    overflow-y:scroll;
+    height: 100%;
 `
 
 interface AProps{
-    item: {description:string, id:number};
+    item: {description:string, id:number, curdate:Date};
+    toggle:boolean;
 }
 
-const MarkView = ({item}:AProps)=>{
+const MarkView = ({item, toggle}:AProps)=>{
     const marker = marked;
     let markup;
     marker.setOptions({
@@ -44,12 +54,15 @@ const MarkView = ({item}:AProps)=>{
         xhtml: false,
     });
 
-    useEffect(()=>{
+    const getMarkHtml = ()=>{
         markup = {__html: marker(item.description)};
-    },[item])
+        return markup;
+    };
 
     return(
-        <RenderView dangerouslySetInnerHTML={markup}/>
+        <Wrapper toggle={toggle}>
+        <RenderView dangerouslySetInnerHTML={getMarkHtml()}/>
+        </Wrapper>
     )
 }
 

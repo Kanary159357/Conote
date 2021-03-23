@@ -1,37 +1,52 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import MarkEditor from './Mark/MarkEditor';
 import MarkView from './Mark/MarkView';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faAngleLeft, faAngleRight} from '@fortawesome/free-solid-svg-icons';
 const ContentWrapper = styled.div`
-    width: 88%;
-    height: 100%;
-    display:flex;
-    flex-direction:column;
+    width: 85%;
 `
-const ViewMenu = styled.div`
-    height: 50px;
-    width: 100%;
-    background: black;
-`;
-
 const ViewContent = styled.div`
     display:flex;
     flex-direction:row;
     height: 100%;
     width: 100%;
+    position:relative;
 `
 interface ViewProp{
-    item: {description:string, id:number};
-    onChange : (id:number, value:string)=>void;
+    item: {description:string, id:number, curdate: Date};
+    onChange : (id:number, value:string, curdate:Date)=>void;
+    len:number;
 }
 
-const ContentView = ({item, onChange}:ViewProp)=>{
-   
+const NoContent = styled.div`
+
+`
+const ViewSwitch = styled.div<toggleProps>`
+    position: absolute;
+    left: ${props=>props.toggle? "97%" : "47%"};
+    color:white;
+    font-size: 40px;
+    cursor:pointer;
+    z-index: 999;
+`
+interface toggleProps{
+    toggle: boolean;
+}
+const ContentView = ({item, onChange, len}:ViewProp)=>{
+    const [toggle,setToggle] = useState(false);
     return(
         <ContentWrapper>
+            {len===0 ? <NoContent/> :  
             <ViewContent>
-                <MarkEditor item={item} onChange={onChange}/>
-                <MarkView item = {item}/>
-            </ViewContent>
+                <ViewSwitch toggle={toggle} onClick={()=>setToggle(!toggle)}>
+                    <FontAwesomeIcon icon={toggle? faAngleLeft : faAngleRight}/>
+                </ViewSwitch>
+                <MarkEditor item={item} onChange={onChange} toggle={toggle}/>
+                <MarkView item = {item} toggle={toggle}/>
+            </ViewContent>}
+          
         </ContentWrapper>
     )
 }
