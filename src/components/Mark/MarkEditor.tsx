@@ -24,8 +24,8 @@ interface RenderProps{
 }
 
 interface ViewProp{
-    item: {description:string, id:number, curdate:Date};
-    onChange : (id:number, value:string, curdate:Date)=>void;
+    item: {description:string, id:number};
+    onChange : (id:number, value:string)=>void;
     toggle:boolean;
 }
 
@@ -35,7 +35,7 @@ const MarkEditor = ({item, onChange, toggle}:ViewProp)=>{
     
     useEffect(()=>{
         const handleChange = (editor:CodeMirror.Editor)=>{
-            onChange(item.id, editor.getValue(), new Date());
+            onChange(item.id, editor.getValue());
         }
         codeMirror.current= CodeMirror.fromTextArea(editorRef.current!,{
             mode:'markdown',

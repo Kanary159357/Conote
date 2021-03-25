@@ -1,8 +1,8 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import ContentMenu from './components/ContentMenu';
 import ContentView from './components/ContentView';
 import styled,{createGlobalStyle} from 'styled-components';
-
+import {NoteRef} from './firebase';
 const GlobalStyle = createGlobalStyle`
   *{
     box-sizing:border-box;
@@ -29,16 +29,41 @@ const temp:IContent[] = [
 interface IContent{
   description:string;
   id:number;
-  curdate: Date;
 };
+
+
 function App() {
   const [index, setIndex] = useState(0);
   const [Noteid, setNoteId] = useState(0); 
   const [arr, setArr] = useState<IContent[]>(temp);
-  const onChange = (id:number, value: string, curdate:Date)=>{
+  const [initLoad, setInitLoad] = useState(false);
+  useEffect(()=>{
+    async function Init(){
+      setInitLoad(true);
+      await NoteRef.once('value').then((res)=>{
+        let items = res.val();
+        let newarr:IContent[]=[];
+        for(let item in items){
+          newarr.push({
+            id:items[item].id,
+            description:items[item].description,
+          })
+        };
+        setArr(newarr);
+      })
+      setInitLoad(false);
+    }
+    Init();
+  },[])
+
+  useEffect(()=>{
+    console.log(initLoad);
+  },[initLoad]);
+
+  const onChange = (id:number, value: string)=>{
     setArr(
       arr.map(item=>
-        item.id===id ? {...item, description:value, date:curdate} : item
+        item.id===id ? {...item, description:value} : item
         )
     )
   }
@@ -60,11 +85,15 @@ function App() {
     setArr([...arr, newNote]);
     setNoteId(Noteid=>Noteid+1);
     setIndex(newNote.id);
+    NoteRef.once('value').then((item)=>
+      console.log(item.toJSON())
+    )
   };
 
   const onIndex = (id:number)=>{
     setIndex(id);
   }
+
   return (
     <Wrapper>
       <GlobalStyle/>
