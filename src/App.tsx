@@ -1,110 +1,25 @@
-import React,{useState,useEffect} from 'react';
-import ContentMenu from './components/ContentMenu';
-import ContentView from './components/ContentView';
-import styled,{createGlobalStyle} from 'styled-components';
-import {NoteRef} from './firebase';
-const GlobalStyle = createGlobalStyle`
-  *{
-    box-sizing:border-box;
-  }
-  @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
-  body{
-    font-family: 'Noto Sans KR', sans-serif;
-    box-sizing: border-box;
-    border:0;
-    margin:0;
-  }
-
-`
-
-const Wrapper = styled.div`
-  height: 100vh;
-  display:flex;
-  width: 100vw;
-`
-const temp:IContent[] = [
-
-]
-
-interface IContent{
-  description:string;
-  id:number;
-};
-
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
 
 function App() {
-  const [index, setIndex] = useState(0);
-  const [Noteid, setNoteId] = useState(0); 
-  const [arr, setArr] = useState<IContent[]>(temp);
-  const [initLoad, setInitLoad] = useState(false);
-  useEffect(()=>{
-    async function Init(){
-      setInitLoad(true);
-      await NoteRef.once('value').then((res)=>{
-        let items = res.val();
-        let newarr:IContent[]=[];
-        for(let item in items){
-          newarr.push({
-            id:items[item].id,
-            description:items[item].description,
-          })
-        };
-        setArr(newarr);
-      })
-      setInitLoad(false);
-    }
-    Init();
-  },[])
-
-  useEffect(()=>{
-    console.log(initLoad);
-  },[initLoad]);
-
-  const onChange = (id:number, value: string)=>{
-    setArr(
-      arr.map(item=>
-        item.id===id ? {...item, description:value} : item
-        )
-    )
-  }
-
-  const onNoteDel = (id:number) =>{
-    const newArr = arr.filter(item=>
-      item.id!==id);
-    setIndex(newArr.length-1);
-    setArr(newArr);
-    setNoteId(Noteid=>Noteid-1);
-  }
-
-  const onNoteAdd = ()=>{
-    const newNote = {
-      description: "",
-      id: Noteid,
-      curdate:new Date(),
-    }
-    setArr([...arr, newNote]);
-    setNoteId(Noteid=>Noteid+1);
-    setIndex(newNote.id);
-    NoteRef.once('value').then((item)=>
-      console.log(item.toJSON())
-    )
-  };
-
-  const onIndex = (id:number)=>{
-    setIndex(id);
-  }
-
   return (
-    <Wrapper>
-      <GlobalStyle/>
-      <ContentMenu 
-        ContentArr={arr}
-        onIndex= {onIndex}
-        onNoteAdd = {onNoteAdd}
-        onNoteDel = {onNoteDel}
-        />
-      <ContentView len = {arr.length} item={arr[index]} onChange={onChange}/>
-    </Wrapper>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.tsx</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
   );
 }
 
