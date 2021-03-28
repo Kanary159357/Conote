@@ -1,8 +1,10 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect, useRef} from 'react';
 import ContentMenu from './components/ContentMenu';
 import ContentView from './components/ContentView';
 import styled,{createGlobalStyle} from 'styled-components';
-import {NoteRef} from './firebase';
+import firestore from './firebase';
+import firebase from 'firebase'
+import { createNoSubstitutionTemplateLiteral } from 'typescript';
 const GlobalStyle = createGlobalStyle`
   *{
     box-sizing:border-box;
@@ -33,61 +35,45 @@ interface IContent{
 
 
 function App() {
-  const [index, setIndex] = useState(0);
   const [Noteid, setNoteId] = useState(0); 
+  const [index, setIndex] = useState(0);
   const [arr, setArr] = useState<IContent[]>(temp);
   const [initLoad, setInitLoad] = useState(false);
+  const arrRef = useRef<IContent[]>();
   useEffect(()=>{
     async function Init(){
       setInitLoad(true);
-      await NoteRef.once('value').then((res)=>{
-        let items = res.val();
-        let newarr:IContent[]=[];
-        for(let item in items){
-          newarr.push({
-            id:items[item].id,
-            description:items[item].description,
-          })
-        };
-        setArr(newarr);
-      })
+      await firestore.collection('test')
+      .onSnapshot((snap)=>{
+        arrRef.current= snap.docs.map((doc)=>{
+          console.log(doc.id);
+          return {id: parseInt(doc.id),
+            description:doc.data().description,}
+          });
+        setArr(arrRef.current);
+        setNoteId(arrRef.current.length);
+      });
       setInitLoad(false);
     }
     Init();
   },[])
 
-  useEffect(()=>{
-    console.log(initLoad);
-  },[initLoad]);
-
   const onChange = (id:number, value: string)=>{
-    setArr(
-      arr.map(item=>
-        item.id===id ? {...item, description:value} : item
-        )
-    )
+    firestore.collection('test').doc(Noteid.toString()).set({
+      description: value
+    })
   }
 
   const onNoteDel = (id:number) =>{
-    const newArr = arr.filter(item=>
-      item.id!==id);
-    setIndex(newArr.length-1);
-    setArr(newArr);
-    setNoteId(Noteid=>Noteid-1);
+    firestore.collection('test').doc(id.toString()).delete();
   }
 
   const onNoteAdd = ()=>{
-    const newNote = {
+
+    firestore.collection('test').doc(Noteid.toString()).set({
       description: "",
-      id: Noteid,
-      curdate:new Date(),
-    }
-    setArr([...arr, newNote]);
-    setNoteId(Noteid=>Noteid+1);
-    setIndex(newNote.id);
-    NoteRef.once('value').then((item)=>
-      console.log(item.toJSON())
-    )
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
   };
 
   const onIndex = (id:number)=>{

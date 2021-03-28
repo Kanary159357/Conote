@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import "firebase/database";
+import "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBIfPpETDoX6d4on1-U7h0oCITfjNn-eLQ",
@@ -13,6 +13,6 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const databaseRef= firebase.database().ref();
-export const NoteRef  = databaseRef.child("Memo");
-export default firebase;
+const firestore = firebase.firestore()
+
+export default firestore;
