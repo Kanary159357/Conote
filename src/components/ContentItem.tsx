@@ -51,10 +51,10 @@ const ItemDel = styled.div`
 
 interface ItemProps {
     item : {description:String;
-            id:number;
+            id:string;
     },
-    onIndex : (id:number)=>void;
-    onNoteDel : (id:number)=>void;
+    onIndex : (id:string)=>void;
+    onNoteDel : (id:string)=>void;
 }
 
 

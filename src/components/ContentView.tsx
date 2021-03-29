@@ -15,8 +15,8 @@ const ViewContent = styled.div`
     position:relative;
 `
 interface ViewProp{
-    item: {description:string, id:number};
-    onChange : (id:number, value:string)=>void;
+    item: {description:string, id:string};
+    onChange : (id:string, value:string)=>void;
     len:number;
 }
 

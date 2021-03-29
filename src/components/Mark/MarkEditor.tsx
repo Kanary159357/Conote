@@ -24,8 +24,8 @@ interface RenderProps{
 }
 
 interface ViewProp{
-    item: {description:string, id:number};
-    onChange : (id:number, value:string)=>void;
+    item: {description:string, id:string};
+    onChange : (id:string, value:string)=>void;
     toggle:boolean;
 }
 
@@ -37,23 +37,24 @@ const MarkEditor = ({item, onChange, toggle}:ViewProp)=>{
         const handleChange = (editor:CodeMirror.Editor)=>{
             onChange(item.id, editor.getValue());
         }
-        codeMirror.current= CodeMirror.fromTextArea(editorRef.current!,{
-            mode:'markdown',
-            lineWrapping:'true',
-            theme: 'material',
-            scrollbarStyle:'overlay',
-        });
-        codeMirror.current?.setValue(item.description);
-        codeMirror.current?.on('change', handleChange);
-        codeMirror.current?.clearHistory();
-
+        const valChange = ()=>{
+            codeMirror.current= CodeMirror.fromTextArea(editorRef.current!,{
+                mode:'markdown',
+                lineWrapping:'true',
+                theme: 'material',
+                scrollbarStyle:'overlay',
+            });
+            codeMirror.current?.setValue(item.description);
+            codeMirror.current?.on('change', handleChange);
+        }
+        valChange();
         return()=>{
             if(codeMirror.current) codeMirror.current.toTextArea();
         }
-        
+
     },[item.id])
-
-
+    
+    
     return (
         <Editor toggle={toggle}>
             <textarea ref= {editorRef} placeholder="오늘의 메모는 뭘까용~ 피 피카츄~"/>

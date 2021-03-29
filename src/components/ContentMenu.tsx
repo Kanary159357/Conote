@@ -36,10 +36,10 @@ const MenuContent = styled.div`
 `
 
 interface MenuProps {
-    ContentArr : {description:String; id:number}[];
-    onIndex : (id:number)=>void;
+    ContentArr : {description:String; id:string}[];
+    onIndex : (id:string)=>void;
     onNoteAdd : ()=>void;
-    onNoteDel : (id:number)=>void;
+    onNoteDel : (id:string)=>void;
 }
 const ContentMenu = ({ContentArr, onIndex, onNoteAdd, onNoteDel}:MenuProps)=>{
     return(
@@ -50,8 +50,8 @@ const ContentMenu = ({ContentArr, onIndex, onNoteAdd, onNoteDel}:MenuProps)=>{
                 </ControlItem>
             </MenuControl>
             <MenuContent>
-            {[...ContentArr].reverse().map((item)=>{
-                return(<ContentItem item={item} key={item.id} onIndex={onIndex} onNoteDel={onNoteDel}/>)
+            {[...ContentArr].reverse().map((item,i)=>{
+                return(<ContentItem item={item} key={i} onIndex={onIndex} onNoteDel={onNoteDel}/>)
             })}
             </MenuContent>
 

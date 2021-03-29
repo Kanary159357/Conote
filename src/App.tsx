@@ -1,15 +1,13 @@
-import React,{useState,useEffect, useRef} from 'react';
+import React,{useState,useEffect, useRef, useCallback} from 'react';
 import ContentMenu from './components/ContentMenu';
 import ContentView from './components/ContentView';
 import styled,{createGlobalStyle} from 'styled-components';
 import firestore from './firebase';
 import firebase from 'firebase'
-import { createNoSubstitutionTemplateLiteral } from 'typescript';
 const GlobalStyle = createGlobalStyle`
   *{
     box-sizing:border-box;
   }
-  @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
   body{
     font-family: 'Noto Sans KR', sans-serif;
     box-sizing: border-box;
@@ -30,12 +28,11 @@ const temp:IContent[] = [
 
 interface IContent{
   description:string;
-  id:number;
+  id:string;
 };
 
 
 function App() {
-  const [Noteid, setNoteId] = useState(0); 
   const [index, setIndex] = useState(0);
   const [arr, setArr] = useState<IContent[]>(temp);
   const [initLoad, setInitLoad] = useState(false);
@@ -46,38 +43,37 @@ function App() {
       await firestore.collection('test')
       .onSnapshot((snap)=>{
         arrRef.current= snap.docs.map((doc)=>{
-          console.log(doc.id);
-          return {id: parseInt(doc.id),
+          return {id: doc.id,
             description:doc.data().description,}
           });
         setArr(arrRef.current);
-        setNoteId(arrRef.current.length);
       });
       setInitLoad(false);
     }
     Init();
   },[])
 
-  const onChange = (id:number, value: string)=>{
-    firestore.collection('test').doc(Noteid.toString()).set({
+  const onChange = useCallback((id:string, value: string)=>{
+    firestore.collection('test').doc(id).set({
       description: value
     })
-  }
+  },[]);
 
-  const onNoteDel = (id:number) =>{
-    firestore.collection('test').doc(id.toString()).delete();
+  const onNoteDel = (id:string) =>{
+    firestore.collection('test').doc(id).delete();
   }
 
   const onNoteAdd = ()=>{
 
-    firestore.collection('test').doc(Noteid.toString()).set({
+    firestore.collection('test').add({
       description: "",
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
   };
 
-  const onIndex = (id:number)=>{
-    setIndex(id);
+  const onIndex = (id:string)=>{
+    const index = arr.findIndex((element)=>element.id===id);
+    setIndex(index);
   }
 
   return (
