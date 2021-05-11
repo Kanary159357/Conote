@@ -10,12 +10,6 @@ const ContentWrapper = styled.div`
     display:flex;
     flex-direction:column;
 `
-const ViewMenu = styled.div`
-    height: 50px;
-    width: 100%;
-    background: black;
-`;
-
 const ViewContent = styled.div`
     display:flex;
     flex-direction:row;

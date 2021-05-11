@@ -24,11 +24,11 @@ interface ViewProp{
 const MarkEditor = ({item, onChange, toggle}:ViewProp)=>{
     let codeMirror = useRef<CodeMirror.EditorFromTextArea>();
     const editorRef= useRef<HTMLTextAreaElement>(null);
-    
+    const handleChange = (editor:CodeMirror.Editor)=>{
+        onChange(item.id, editor.getValue());
+    }
     useEffect(()=>{
-        const handleChange = (editor:CodeMirror.Editor)=>{
-            onChange(item.id, editor.getValue());
-        }
+        
         codeMirror.current= CodeMirror.fromTextArea(editorRef.current!,{
             mode:'markdown',
             lineWrapping:'true',
@@ -37,7 +37,6 @@ const MarkEditor = ({item, onChange, toggle}:ViewProp)=>{
         });
         codeMirror.current?.setValue(item.description);
         codeMirror.current?.on('change', handleChange);
-        codeMirror.current?.clearHistory();
 
         return()=>{
             if(codeMirror.current) codeMirror.current.toTextArea();

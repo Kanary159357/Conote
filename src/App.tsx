@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useRef} from 'react';
+import React,{useState,useEffect} from 'react';
 import ContentMenu from './components/ContentMenu';
 import ContentView from './components/ContentView';
 import styled,{createGlobalStyle} from 'styled-components';
@@ -48,10 +48,6 @@ function App() {
     setArr(newArr);
   };
 
-
-  useEffect(()=>{
-    console.log(index);
-  },[index,arr]);
 
   const onNoteAdd = ()=>{
     const newNote = {

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import marked from 'marked';
 import prismjs from 'prismjs';
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import './Prismtheme.css'
 const RenderView = styled.div<{toggle:boolean}>`
     width: ${props=>props.toggle? "0%": "50%"};
@@ -39,7 +39,6 @@ interface AProps{
 const MarkView = ({item, toggle}:AProps)=>{
     const marker = marked;
     let markup;
-    console.log(item.description)
     marker.setOptions({
         highlight: function (code, lang) {
             if(prismjs.languages[lang]){
@@ -61,10 +60,6 @@ const MarkView = ({item, toggle}:AProps)=>{
         smartypants: false,
         xhtml: false,
     });
-
-    useEffect(()=>{
-        markup = {__html: marker(item.description)};
-    },[item])
 
     const getMarkHtml = ()=>{
         markup = {__html: marker(item.description)};
