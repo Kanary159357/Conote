@@ -9,12 +9,11 @@ import 'codemirror/addon/scroll/simplescrollbars.js'
 import 'codemirror/addon/scroll/simplescrollbars.css'
 const CodeMirror = require('codemirror');
 
-const Editor = styled.div`
-  width: 50%;
+const Editor = styled.div<{toggle:boolean}>`
+  width: ${props=>props.toggle ? "calc(100% )" : "50%"};
     &::-webkit-scrollbar {
         display: none;
     }
-  
 `
 interface ViewProp{
     item: {description:string, id:number};
@@ -22,7 +21,7 @@ interface ViewProp{
     toggle:boolean;
 }
 
-const MarkEditor = ({item, onChange}:ViewProp)=>{
+const MarkEditor = ({item, onChange, toggle}:ViewProp)=>{
     let codeMirror = useRef<CodeMirror.EditorFromTextArea>();
     const editorRef= useRef<HTMLTextAreaElement>(null);
     
@@ -48,8 +47,7 @@ const MarkEditor = ({item, onChange}:ViewProp)=>{
 
 
     return (
-        <Editor>
-
+        <Editor toggle={toggle}>
             <textarea ref= {editorRef}/>
         </Editor>
     )

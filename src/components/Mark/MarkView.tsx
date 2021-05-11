@@ -1,18 +1,34 @@
 import styled from 'styled-components';
 import marked from 'marked';
 import prismjs from 'prismjs';
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import './Prismtheme.css'
-const RenderView = styled.div`
-    width: 50%;
+const RenderView = styled.div<{toggle:boolean}>`
+    width: ${props=>props.toggle? "0%": "50%"};
     height:100%;
     text-overflow:ellipsis;
     word-wrap: break-word;
+    padding: 40px;
     box-sizing: border-box;
-    &::-webkit-scrollbar{
-	border-radius: 10px;
-	background-color: #F5F5F5;
-    }
+    overflow-y: scroll;
+    ::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
 `
 
 interface AProps{
@@ -20,9 +36,10 @@ interface AProps{
     toggle:boolean;
 }
 
-const MarkView = ({item}:AProps)=>{
+const MarkView = ({item, toggle}:AProps)=>{
     const marker = marked;
     let markup;
+    console.log(item.description)
     marker.setOptions({
         highlight: function (code, lang) {
             if(prismjs.languages[lang]){
@@ -49,8 +66,12 @@ const MarkView = ({item}:AProps)=>{
         markup = {__html: marker(item.description)};
     },[item])
 
+    const getMarkHtml = ()=>{
+        markup = {__html: marker(item.description)};
+        return markup;
+    };
     return(
-        <RenderView dangerouslySetInnerHTML={markup}/>
+        <RenderView toggle={toggle} dangerouslySetInnerHTML={getMarkHtml()}/>
     )
 }
 
