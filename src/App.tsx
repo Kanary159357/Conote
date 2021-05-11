@@ -3,11 +3,18 @@ import ContentMenu from './components/ContentMenu';
 import ContentView from './components/ContentView';
 
 import styled,{createGlobalStyle} from 'styled-components';
+<<<<<<< HEAD
 
+=======
+import firestore from './firebase';
+import firebase from 'firebase'
+import { createNoSubstitutionTemplateLiteral } from 'typescript';
+>>>>>>> parent of 7799289 (onChange, id changed.  num to string)
 const GlobalStyle = createGlobalStyle`
   *{
     box-sizing:border-box;
   }
+  @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
   body{
     font-family: 'Noto Sans KR', sans-serif;
     box-sizing: border-box;
@@ -40,15 +47,17 @@ const temp:IContent[] = [
 
 interface IContent{
   description:string;
-  id:string;
+  id:number;
 };
 
 
 function App() {
+  const [Noteid, setNoteId] = useState(0); 
   const [index, setIndex] = useState(0);
   const [arr, setArr] = useState<IContent[]>(temp);
   const [initLoad, setInitLoad] = useState(false);
   const arrRef = useRef<IContent[]>();
+<<<<<<< HEAD
 
   const onChange = (id:string, value: string)=>{
     firestore.collection('test').doc(id).set({
@@ -61,8 +70,38 @@ function App() {
     firestore.collection('test').doc(id).delete();
     setIndex(0);
   };
+=======
+  useEffect(()=>{
+    async function Init(){
+      setInitLoad(true);
+      await firestore.collection('test')
+      .onSnapshot((snap)=>{
+        arrRef.current= snap.docs.map((doc)=>{
+          console.log(doc.id);
+          return {id: parseInt(doc.id),
+            description:doc.data().description,}
+          });
+        setArr(arrRef.current);
+        setNoteId(arrRef.current.length);
+      });
+      setInitLoad(false);
+    }
+    Init();
+  },[])
+
+  const onChange = (id:number, value: string)=>{
+    firestore.collection('test').doc(Noteid.toString()).set({
+      description: value
+    })
+  }
+
+  const onNoteDel = (id:number) =>{
+    firestore.collection('test').doc(id.toString()).delete();
+  }
+>>>>>>> parent of 7799289 (onChange, id changed.  num to string)
 
 
+<<<<<<< HEAD
   useEffect(()=>{
     console.log(index);
   },[index,arr]);
@@ -75,6 +114,17 @@ function App() {
     const index = arr.findIndex((element)=>element.id===id);
     setIndex(index);
   };
+=======
+    firestore.collection('test').doc(Noteid.toString()).set({
+      description: "",
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+  };
+
+  const onIndex = (id:number)=>{
+    setIndex(id);
+  }
+>>>>>>> parent of 7799289 (onChange, id changed.  num to string)
 
   return (
     <Wrapper>

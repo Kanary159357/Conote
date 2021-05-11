@@ -17,8 +17,8 @@ const Editor = styled.div`
   
 `
 interface ViewProp{
-    item: {description:string, id:string};
-    onChange : (id:string, value:string)=>void;
+    item: {description:string, id:number};
+    onChange : (id:number, value:string)=>void;
     toggle:boolean;
 }
 
@@ -30,24 +30,23 @@ const MarkEditor = ({item, onChange}:ViewProp)=>{
         const handleChange = (editor:CodeMirror.Editor)=>{
             onChange(item.id, editor.getValue());
         }
-        const valChange = ()=>{
-            codeMirror.current= CodeMirror.fromTextArea(editorRef.current!,{
-                mode:'markdown',
-                lineWrapping:'true',
-                theme: 'material',
-                scrollbarStyle:'overlay',
-            });
-            codeMirror.current?.setValue(item.description);
-            codeMirror.current?.on('change', handleChange);
-        }
-        valChange();
+        codeMirror.current= CodeMirror.fromTextArea(editorRef.current!,{
+            mode:'markdown',
+            lineWrapping:'true',
+            theme: 'material',
+            scrollbarStyle:'overlay',
+        });
+        codeMirror.current?.setValue(item.description);
+        codeMirror.current?.on('change', handleChange);
+        codeMirror.current?.clearHistory();
+
         return()=>{
             if(codeMirror.current) codeMirror.current.toTextArea();
         }
-
+        
     },[item.id])
-    
-    
+
+
     return (
         <Editor>
 

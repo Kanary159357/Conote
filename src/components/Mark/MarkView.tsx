@@ -16,7 +16,7 @@ const RenderView = styled.div`
 `
 
 interface AProps{
-    item: {description:string, id:string};
+    item: {description:string, id:number};
     toggle:boolean;
 }
 
