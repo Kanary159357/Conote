@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import marked from 'marked';
 import prismjs from 'prismjs';
-import React,{useState} from 'react';
+import React from 'react';
 import './Prismtheme.css'
 const Wrapper = styled.div<RenderProps>`
     width: ${props=>props.toggle? "0%" : "50%"};

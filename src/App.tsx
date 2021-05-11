@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useRef, useCallback} from 'react';
+import React,{useState,useEffect, useRef} from 'react';
 import ContentMenu from './components/ContentMenu';
 import ContentView from './components/ContentView';
 import styled,{createGlobalStyle} from 'styled-components';
@@ -38,14 +38,16 @@ function App() {
   const [initLoad, setInitLoad] = useState(false);
   const arrRef = useRef<IContent[]>();
   useEffect(()=>{
-    async function Init(){
+    function Init(){
       setInitLoad(true);
-      await firestore.collection('test')
+      firestore.collection('test')
+      .orderBy('timestamp', 'desc')
       .onSnapshot((snap)=>{
-        arrRef.current= snap.docs.map((doc)=>{
-          return {id: doc.id,
-            description:doc.data().description,}
-          });
+        arrRef.current= snap.docs.map((doc)=>({
+          id: doc.id,
+          description:doc.data().description,
+          }
+          ));
         setArr(arrRef.current);
       });
       setInitLoad(false);
@@ -53,18 +55,19 @@ function App() {
     Init();
   },[])
 
-  const onChange = useCallback((id:string, value: string)=>{
+  const onChange = (id:string, value: string)=>{
     firestore.collection('test').doc(id).set({
-      description: value
+      description: value,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     })
-  },[]);
+  };
 
-  const onNoteDel = (id:string) =>{
+  const onNoteDel =(id:string) =>{
     firestore.collection('test').doc(id).delete();
-  }
+    setIndex(0);
+  };
 
   const onNoteAdd = ()=>{
-
     firestore.collection('test').add({
       description: "",
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -74,7 +77,7 @@ function App() {
   const onIndex = (id:string)=>{
     const index = arr.findIndex((element)=>element.id===id);
     setIndex(index);
-  }
+  };
 
   return (
     <Wrapper>

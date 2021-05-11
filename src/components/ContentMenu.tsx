@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 import ContentItem from './ContentItem';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -50,7 +51,7 @@ const ContentMenu = ({ContentArr, onIndex, onNoteAdd, onNoteDel}:MenuProps)=>{
                 </ControlItem>
             </MenuControl>
             <MenuContent>
-            {[...ContentArr].reverse().map((item,i)=>{
+            {[...ContentArr].map((item,i)=>{
                 return(<ContentItem item={item} key={i} onIndex={onIndex} onNoteDel={onNoteDel}/>)
             })}
             </MenuContent>
@@ -60,4 +61,4 @@ const ContentMenu = ({ContentArr, onIndex, onNoteAdd, onNoteDel}:MenuProps)=>{
     )
 }
 
-export default ContentMenu 
+export default ContentMenu; 

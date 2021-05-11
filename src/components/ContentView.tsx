@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React,{ useState } from 'react';
 import styled from 'styled-components';
 import MarkEditor from './Mark/MarkEditor';
 import MarkView from './Mark/MarkView';
@@ -40,7 +40,7 @@ const ContentView = ({item, onChange, len}:ViewProp)=>{
         <ContentWrapper>
             {len===0 ? <NoContent/> :  
             <ViewContent>
-                <ViewSwitch toggle={toggle} onClick={()=>setToggle(!toggle)}>
+                <ViewSwitch toggle={toggle} onClick={()=>setToggle(toggle=>!toggle)}>
                     <FontAwesomeIcon icon={toggle? faAngleLeft : faAngleRight}/>
                 </ViewSwitch>
                 <MarkEditor item={item} onChange={onChange} toggle={toggle}/>
@@ -51,4 +51,4 @@ const ContentView = ({item, onChange, len}:ViewProp)=>{
     )
 }
 
-export default ContentView
+export default React.memo(ContentView);

@@ -81,4 +81,4 @@ const ContentItem = ({item, onIndex, onNoteDel}:ItemProps)=>{
     )
 }
 
-export default ContentItem
+export default React.memo(ContentItem);
