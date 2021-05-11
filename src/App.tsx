@@ -1,7 +1,6 @@
 import React,{useState,useEffect, useRef} from 'react';
 import ContentMenu from './components/ContentMenu';
 import ContentView from './components/ContentView';
-
 import styled,{createGlobalStyle} from 'styled-components';
 const GlobalStyle = createGlobalStyle`
   *{
