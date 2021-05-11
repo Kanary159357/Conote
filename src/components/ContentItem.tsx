@@ -7,7 +7,7 @@ const ItemWrapper = styled.div`
     min-height:79px;
     border-bottom : 1px solid #d9d9d9;
     position:relative;
-    max-height:79px;
+    max-height:100px;
     display:flex;
 `
 
@@ -66,7 +66,7 @@ const ContentItem = ({item, onIndex, onNoteDel}:ItemProps)=>{
         onNoteDel(item.id)
     }
     const line = item.description.indexOf('\n') ===-1 ? item.description.length : item.description.indexOf('\n');
-    const Ti = item.description==="" ? "New Note" :  item.description.substring(0,line) ;
+    const Ti = item.description.substring(0,line)
     const Ma = item.description.substring(line);
     return(
         <ItemWrapper>

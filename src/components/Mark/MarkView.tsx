@@ -3,16 +3,9 @@ import marked from 'marked';
 import prismjs from 'prismjs';
 import React from 'react';
 import './Prismtheme.css'
-const Wrapper = styled.div<RenderProps>`
-    width: ${props=>props.toggle? "0%" : "50%"};
-    transition: all 0.2s;
-`;
-
-interface RenderProps{
-    toggle: boolean;
-}
-
 const RenderView = styled.div`
+    width: 50%;
+    height:100%;
     text-overflow:ellipsis;
     word-wrap: break-word;
     box-sizing: border-box;
@@ -20,8 +13,6 @@ const RenderView = styled.div`
 	border-radius: 10px;
 	background-color: #F5F5F5;
     }
-    overflow-y:scroll;
-    height: 100%;
 `
 
 interface AProps{
@@ -29,7 +20,7 @@ interface AProps{
     toggle:boolean;
 }
 
-const MarkView = ({item, toggle}:AProps)=>{
+const MarkView = ({item}:AProps)=>{
     const marker = marked;
     let markup;
     marker.setOptions({
@@ -54,15 +45,12 @@ const MarkView = ({item, toggle}:AProps)=>{
         xhtml: false,
     });
 
-    const getMarkHtml = ()=>{
+    useEffect(()=>{
         markup = {__html: marker(item.description)};
-        return markup;
-    };
+    },[item])
 
     return(
-        <Wrapper toggle={toggle}>
-        <RenderView dangerouslySetInnerHTML={getMarkHtml()}/>
-        </Wrapper>
+        <RenderView dangerouslySetInnerHTML={markup}/>
     )
 }
 

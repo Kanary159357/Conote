@@ -2,17 +2,23 @@ import React,{ useState } from 'react';
 import styled from 'styled-components';
 import MarkEditor from './Mark/MarkEditor';
 import MarkView from './Mark/MarkView';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faAngleLeft, faAngleRight} from '@fortawesome/free-solid-svg-icons';
 const ContentWrapper = styled.div`
-    width: 85%;
+    width: 88%;
+    height: 100%;
+    display:flex;
+    flex-direction:column;
 `
+const ViewMenu = styled.div`
+    height: 50px;
+    width: 100%;
+    background: black;
+`;
+
 const ViewContent = styled.div`
     display:flex;
     flex-direction:row;
     height: 100%;
     width: 100%;
-    position:relative;
 `
 interface ViewProp{
     item: {description:string, id:string};
@@ -20,25 +26,10 @@ interface ViewProp{
     len:number;
 }
 
-const NoContent = styled.div`
-
-`
-const ViewSwitch = styled.div<toggleProps>`
-    position: absolute;
-    left: ${props=>props.toggle? "97%" : "47%"};
-    color:white;
-    font-size: 40px;
-    cursor:pointer;
-    z-index: 999;
-`
-interface toggleProps{
-    toggle: boolean;
-}
-const ContentView = ({item, onChange, len}:ViewProp)=>{
-    const [toggle,setToggle] = useState(false);
+const ContentView = ({item, onChange}:ViewProp)=>{
+   
     return(
         <ContentWrapper>
-            {len===0 ? <NoContent/> :  
             <ViewContent>
                 <ViewSwitch toggle={toggle} onClick={()=>setToggle(toggle=>!toggle)}>
                     <FontAwesomeIcon icon={toggle? faAngleLeft : faAngleRight}/>

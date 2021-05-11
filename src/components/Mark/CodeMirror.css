@@ -45,8 +45,6 @@
 .CodeMirror-guttermarker-subtle { color: #999; }
 
 /* CURSOR */
-.CodeMirror { border: 1px solid silver; }
-.CodeMirror pre.CodeMirror-placeholder { color: #97a1a5 !important; }
 
 .CodeMirror-cursor {
   border-left: 1px solid black;

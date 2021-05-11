@@ -1,35 +1,28 @@
 import {useEffect,useRef} from 'react'
 import styled from 'styled-components'
 import'codemirror/mode/css/css';
-import './CodeMirrorMaterial.css';
 import './CodeMirror.css';
+import 'codemirror/theme/material.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/addon/scroll/simplescrollbars.js'
 import 'codemirror/addon/scroll/simplescrollbars.css'
-import 'codemirror/addon/display/placeholder'
 const CodeMirror = require('codemirror');
 
-const Editor = styled.div<RenderProps>`
-    width: ${props=>props.toggle? "100%" : "50%"};
-    transition: all 0.2s;
-
+const Editor = styled.div`
+  width: 50%;
     &::-webkit-scrollbar {
         display: none;
     }
   
 `
-interface RenderProps{
-    toggle: boolean;
-}
-
 interface ViewProp{
     item: {description:string, id:string};
     onChange : (id:string, value:string)=>void;
     toggle:boolean;
 }
 
-const MarkEditor = ({item, onChange, toggle}:ViewProp)=>{
+const MarkEditor = ({item, onChange}:ViewProp)=>{
     let codeMirror = useRef<CodeMirror.EditorFromTextArea>();
     const editorRef= useRef<HTMLTextAreaElement>(null);
     
@@ -56,8 +49,9 @@ const MarkEditor = ({item, onChange, toggle}:ViewProp)=>{
     
     
     return (
-        <Editor toggle={toggle}>
-            <textarea ref= {editorRef} placeholder="오늘의 메모는 뭘까용~ 피 피카츄~"/>
+        <Editor>
+
+            <textarea ref= {editorRef}/>
         </Editor>
     )
 }
