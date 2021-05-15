@@ -2,9 +2,28 @@ const { app, BrowserWindow, ipcRenderer, ipcMain } = require('electron')
 const path = require('path')
 const isDev = require('electron-is-dev')
 const fs = require('fs')
-const { writeFileSync, writeFile } = require('fs')
 let mainWindow
+const sqlite3 = require('sqlite3').verbose()
+const db = new sqlite3.Database('Database.db')
 
+function addMemo(contents, date) {
+    const query = `INSERT INTO memo(contents, date) VALUES ('${contents}', '${date}')`
+    db.serialize()
+    db.each(query)
+}
+
+function listMemo() {
+    db.serialize(function () {
+        db.each(
+            'SELECT rowid AS id, contents, date FROM memo',
+            function (err, row) {
+                console.log(
+                    row.id + ' - ' + row.contents + '[' + row.date + ']'
+                )
+            }
+        )
+    })
+}
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 900,
@@ -32,14 +51,9 @@ function createWindow() {
 }
 
 app.on('ready', () => {
-    const ipc = ipcMain
-    ipc.on('message', (event, res) => {
-        console.log(res)
-        writeFile(__dirname + '/config.json', res, (err, data) => {
-            if (err) {
-                console.log('err')
-            }
-        })
+    ipcMain.on('message', () => {
+        addMemo('토요일에 어디서 놀지 생각하기', '2020-02-11')
+        listMemo()
     })
     createWindow()
 })

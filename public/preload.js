@@ -1,14 +1,13 @@
-const { readFile, readFileSync, writeFileSync } = require('fs')
 const { contextBridge, ipcRenderer, ipcMain } = require('electron')
-require('electron')
-contextBridge.exposeInMainWorld('config', {
-    readConfig: () => {
-        const data = readFileSync(__dirname + '/config.json', 'utf-8')
-        return data
-    },
-    writeJson: (data) => {
-        writeFileSync(__dirname + '/config.json', data)
-    },
 
-    ipc: ipcRenderer,
+contextBridge.exposeInMainWorld('config', {
+    /* addMemo: () => {
+        addMemo('토요일에 어디서 놀지 생각하기', '2020-02-11')
+    },
+    listMemo: () => {
+        listMemo()
+    },*/
+    sendAdd: () => {
+        ipcRenderer.send('message')
+    },
 })

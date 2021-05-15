@@ -18,11 +18,13 @@
         "@types/styled-components": "^5.1.9",
         "codemirror": "^5.59.4",
         "electron-is-dev": "^2.0.0",
+        "electron-rebuild": "^2.3.5",
         "marked": "^2.0.3",
         "prismjs": "^1.23.0",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
         "react-scripts": "4.0.3",
+        "sqlite3": "^5.0.2",
         "styled-components": "^5.3.0",
         "typescript": "^4.1.2",
         "web-vitals": "^1.0.1"
@@ -36,7 +38,8 @@
         "eject": "react-scripts eject",
         "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
         "build": "yarn react-build && electron-builder",
-        "release": "yarn react-build && electron-builder --publish=always"
+        "release": "yarn react-build && electron-builder --publish=always",
+        "rebuild": "electron-rebuild -w sqlite3"
     },
     "eslintConfig": {
         "extends": [
@@ -58,7 +61,10 @@
     },
     "devDependencies": {
         "@types/react": "^17.0.5",
+        "concurrently": "^6.1.0",
+        "cross-env": "^7.0.3",
         "electron": "^12.0.7",
-        "electron-builder": "^22.10.5"
+        "electron-builder": "^22.10.5",
+        "wait-on": "^5.3.0"
     }
 }

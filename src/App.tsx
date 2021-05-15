@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import ContentMenu from './components/ContentMenu'
 import ContentView from './components/ContentView'
 import styled, { createGlobalStyle } from 'styled-components'
-import { IpcRenderer } from 'electron'
-import { write } from 'fs'
+
 const GlobalStyle = createGlobalStyle`
   *{
     box-sizing:border-box;
@@ -27,14 +26,12 @@ interface IContent {
 declare global {
     interface Window {
         config: {
-            readConfig: () => string
-            writeJson: (data: string) => void
-            ipc: IpcRenderer
+            sendAdd: () => {}
         }
     }
 }
 function App() {
-    const { readConfig, writeJson, ipc } = window.config
+    const { sendAdd } = window.config
     const [Noteid, setNoteId] = useState(0)
     const [index, setIndex] = useState(0)
     const [arr, setArr] = useState<IContent[]>(temp)
@@ -52,7 +49,6 @@ function App() {
         )
         setArr(newArr)
         console.log(newArr)
-        ipc.send('message', JSON.stringify(newArr))
     }
 
     const onNoteDel = (id: number) => {
@@ -70,24 +66,22 @@ function App() {
         setArr(newArr)
         setNoteId((Noteid) => Noteid + 1)
     }
-    useEffect(() => {
-        let data = readConfig()
-        const content: IContent[] = JSON.parse(data)
-        setArr(content)
-    }, [readConfig])
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.ctrlKey && e.code === 'KeyS') {
                 console.log(ArrRef.current)
-                ipc.send('message', JSON.stringify(ArrRef.current))
             }
         }
         window.addEventListener('keydown', (e) => handleKeyDown(e))
         return () => {
             window.removeEventListener('keydown', handleKeyDown)
         }
-    }, [ipc])
+    }, [])
+
+    useEffect(() => {
+        sendAdd()
+    }, [])
 
     const onIndex = (id: number) => {
         const index = arr.findIndex((element) => element.id === id)
