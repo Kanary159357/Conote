@@ -7,7 +7,20 @@ contextBridge.exposeInMainWorld('config', {
     listMemo: () => {
         listMemo()
     },*/
-    sendAdd: () => {
-        ipcRenderer.send('message')
+    sendAdd: (id) => {
+        const data = {
+            id: id,
+            content: '',
+        }
+        ipcRenderer.send('add', data)
+    },
+    sendUpdate: (id, content) => {
+        console.log(id, content)
+
+        ipcRenderer.send('update', { id, content })
+    },
+    sendDelete: (id) => {
+        console.log(id)
+        ipcRenderer.send('delete', id)
     },
 })

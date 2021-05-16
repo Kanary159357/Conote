@@ -6,23 +6,28 @@ let mainWindow
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('Database.db')
 
-function addMemo(contents, date) {
-    const query = `INSERT INTO memo(contents, date) VALUES ('${contents}', '${date}')`
+function addMemo(id, content) {
+    const query = `INSERT INTO memo(id, content) VALUES ('${id}', '${content}')`
     db.serialize()
     db.each(query)
 }
 
 function listMemo() {
     db.serialize(function () {
-        db.each(
-            'SELECT rowid AS id, contents, date FROM memo',
-            function (err, row) {
-                console.log(
-                    row.id + ' - ' + row.contents + '[' + row.date + ']'
-                )
-            }
-        )
+        db.each('SELECT id, content FROM memo', function (err, row) {
+            console.log(row.id + ' - ' + row.content)
+        })
     })
+}
+function deleteMemo(id) {
+    const query = `DELETE FROM memo WHERE id =${id}`
+    db.serialize()
+    db.each(query)
+}
+function updateMemo(id, content) {
+    const query = `UPDATE memo SET content = '${content}' where id = ${id}`
+    db.serialize()
+    db.each(query)
 }
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -51,10 +56,22 @@ function createWindow() {
 }
 
 app.on('ready', () => {
-    ipcMain.on('message', () => {
-        addMemo('토요일에 어디서 놀지 생각하기', '2020-02-11')
+    ipcMain.on('add', (e, arg) => {
+        const { id, content } = arg
+        addMemo(id, content)
         listMemo()
     })
+    ipcMain.on('delete', (e, id) => {
+        console.log(id)
+        deleteMemo(id)
+        listMemo()
+    })
+    ipcMain.on('update', (e, arg) => {
+        const { id, content } = arg
+        updateMemo(id, content)
+        listMemo()
+    })
+
     createWindow()
 })
 app.on('window-all-closed', () => {

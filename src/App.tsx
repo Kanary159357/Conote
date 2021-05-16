@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import ContentMenu from './components/ContentMenu'
 import ContentView from './components/ContentView'
 import styled, { createGlobalStyle } from 'styled-components'
+import { send } from 'process'
 
 const GlobalStyle = createGlobalStyle`
   *{
@@ -26,13 +27,15 @@ interface IContent {
 declare global {
     interface Window {
         config: {
-            sendAdd: () => {}
+            sendAdd: (id: number) => {}
+            sendDelete: (id: number) => {}
+            sendUpdate: (id: number, content: string) => {}
         }
     }
 }
 function App() {
-    const { sendAdd } = window.config
-    const [Noteid, setNoteId] = useState(0)
+    const { sendAdd, sendUpdate, sendDelete } = window.config
+    const [Noteid, setNoteId] = useState(1)
     const [index, setIndex] = useState(0)
     const [arr, setArr] = useState<IContent[]>(temp)
 
@@ -47,6 +50,7 @@ function App() {
         const newArr = arr.map((item) =>
             item.id === id ? { ...item, description: value } : item
         )
+        sendUpdate(id, value)
         setArr(newArr)
         console.log(newArr)
     }
@@ -54,16 +58,16 @@ function App() {
     const onNoteDel = (id: number) => {
         const newArr = arr.filter((item) => item.id !== id)
         setIndex(newArr.length - 1)
+        sendDelete(id)
         setArr(newArr)
     }
     const onNoteAdd = () => {
+        sendAdd(Noteid)
         const newNote = {
             description: '',
             id: Noteid,
         }
         setArr([...arr, newNote])
-        const newArr = arr.concat(newNote)
-        setArr(newArr)
         setNoteId((Noteid) => Noteid + 1)
     }
 
@@ -79,9 +83,7 @@ function App() {
         }
     }, [])
 
-    useEffect(() => {
-        sendAdd()
-    }, [])
+    useEffect(() => {}, [])
 
     const onIndex = (id: number) => {
         const index = arr.findIndex((element) => element.id === id)
