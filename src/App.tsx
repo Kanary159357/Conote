@@ -30,11 +30,13 @@ declare global {
             sendAdd: (id: number) => {}
             sendDelete: (id: number) => {}
             sendUpdate: (id: number, content: string) => {}
+            onInit: () => {}
+            sendInit: () => {}
         }
     }
 }
 function App() {
-    const { sendAdd, sendUpdate, sendDelete } = window.config
+    const { sendAdd, sendUpdate, sendDelete, onInit, sendInit } = window.config
     const [Noteid, setNoteId] = useState(1)
     const [index, setIndex] = useState(0)
     const [arr, setArr] = useState<IContent[]>(temp)
@@ -74,7 +76,7 @@ function App() {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.ctrlKey && e.code === 'KeyS') {
-                console.log(ArrRef.current)
+                sendInit()
             }
         }
         window.addEventListener('keydown', (e) => handleKeyDown(e))
@@ -83,7 +85,9 @@ function App() {
         }
     }, [])
 
-    useEffect(() => {}, [])
+    useEffect(() => {
+        onInit()
+    }, [])
 
     const onIndex = (id: number) => {
         const index = arr.findIndex((element) => element.id === id)

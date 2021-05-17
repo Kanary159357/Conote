@@ -1,12 +1,6 @@
 const { contextBridge, ipcRenderer, ipcMain } = require('electron')
 
 contextBridge.exposeInMainWorld('config', {
-    /* addMemo: () => {
-        addMemo('토요일에 어디서 놀지 생각하기', '2020-02-11')
-    },
-    listMemo: () => {
-        listMemo()
-    },*/
     sendAdd: (id) => {
         const data = {
             id: id,
@@ -22,5 +16,14 @@ contextBridge.exposeInMainWorld('config', {
     sendDelete: (id) => {
         console.log(id)
         ipcRenderer.send('delete', id)
+    },
+    onInit: () => {
+        ipcRenderer.on('init', (event, data) => {
+            console.log(data)
+        })
+        ipcRenderer.send('did-finish-load')
+    },
+    sendInit: () => {
+        ipcRenderer.send('did-finish-load')
     },
 })

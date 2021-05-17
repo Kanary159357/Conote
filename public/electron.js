@@ -1,4 +1,10 @@
-const { app, BrowserWindow, ipcRenderer, ipcMain } = require('electron')
+const {
+    app,
+    BrowserWindow,
+    ipcRenderer,
+    ipcMain,
+    webContents,
+} = require('electron')
 const path = require('path')
 const isDev = require('electron-is-dev')
 const fs = require('fs')
@@ -29,6 +35,28 @@ function updateMemo(id, content) {
     db.serialize()
     db.each(query)
 }
+function pusher() {
+    return new Promise(function (resolve, reject) {
+        const result = []
+        db.serialize(function () {
+            db.each(
+                'SELECT id, content FROM memo',
+                function (err, row) {
+                    if (err) reject(err)
+                    result.push({ id: row.id, description: row.content })
+                },
+                () => {
+                    resolve(result)
+                }
+            )
+        })
+    })
+}
+function getData() {
+    pusher().then((data) => {
+        return data
+    })
+}
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 900,
@@ -50,6 +78,11 @@ function createWindow() {
     if (isDev) {
         mainWindow.webContents.openDevTools({ mode: 'detach' })
     }
+    const webCont = mainWindow.webContents
+    webCont.on('did-finish-load', async () => {
+        const data = await pusher()
+        webCont.send('init', data)
+    })
     mainWindow.setResizable(true)
     mainWindow.on('closed', () => (mainWindow = null))
     mainWindow.focus()
