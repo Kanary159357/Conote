@@ -30,13 +30,15 @@ declare global {
             sendAdd: (id: number) => {}
             sendDelete: (id: number) => {}
             sendUpdate: (id: number, content: string) => {}
-            onInit: () => {}
-            sendInit: () => {}
+            onInit: any
+            sendInit: () => IContent[]
+            content: string
         }
     }
 }
 function App() {
-    const { sendAdd, sendUpdate, sendDelete, onInit, sendInit } = window.config
+    const { sendAdd, sendUpdate, sendDelete, onInit, sendInit, content } =
+        window.config
     const [Noteid, setNoteId] = useState(1)
     const [index, setIndex] = useState(0)
     const [arr, setArr] = useState<IContent[]>(temp)
@@ -86,9 +88,17 @@ function App() {
     }, [])
 
     useEffect(() => {
-        onInit()
+        function Inita() {
+            return onInit()
+        }
+        Inita().then((resolved: any) => {
+            console.log(resolved)
+            setArr(resolved)
+        })
     }, [])
-
+    useEffect(() => {
+        console.log(arr)
+    }, [arr])
     const onIndex = (id: number) => {
         const index = arr.findIndex((element) => element.id === id)
         setIndex(index)

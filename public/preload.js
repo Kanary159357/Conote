@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer, ipcMain } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('config', {
     sendAdd: (id) => {
@@ -10,18 +10,18 @@ contextBridge.exposeInMainWorld('config', {
     },
     sendUpdate: (id, content) => {
         console.log(id, content)
-
         ipcRenderer.send('update', { id, content })
     },
     sendDelete: (id) => {
         console.log(id)
         ipcRenderer.send('delete', id)
     },
-    onInit: () => {
-        ipcRenderer.on('init', (event, data) => {
-            console.log(data)
+    onInit: async () => {
+        let content
+        await ipcRenderer.invoke('inittest').then((data) => {
+            content = data
         })
-        ipcRenderer.send('did-finish-load')
+        return content
     },
     sendInit: () => {
         ipcRenderer.send('did-finish-load')

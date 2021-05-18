@@ -52,11 +52,7 @@ function pusher() {
         })
     })
 }
-function getData() {
-    pusher().then((data) => {
-        return data
-    })
-}
+
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 900,
@@ -83,6 +79,7 @@ function createWindow() {
         const data = await pusher()
         webCont.send('init', data)
     })
+
     mainWindow.setResizable(true)
     mainWindow.on('closed', () => (mainWindow = null))
     mainWindow.focus()
@@ -104,7 +101,10 @@ app.on('ready', () => {
         updateMemo(id, content)
         listMemo()
     })
-
+    ipcMain.handle('inittest', async (event) => {
+        const result = await pusher()
+        return result
+    })
     createWindow()
 })
 app.on('window-all-closed', () => {
